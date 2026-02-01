@@ -108,9 +108,16 @@
             animation: heartbeat 1.5s ease-in-out infinite;
         }
 
+        .card .couple-photo {
+            width: 180px;
+            height: auto;
+            margin-bottom: 1.5rem;
+            animation: heartbeat 1.5s ease-in-out infinite;
+        }
+
         @keyframes heartbeat {
             0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
+            50% { transform: scale(1.05); }
         }
 
         /* Buttons Container */
@@ -272,6 +279,11 @@
                 font-size: 3rem;
             }
 
+            .card .couple-photo {
+                width: 140px;
+                height: auto;
+            }
+
             .btn {
                 padding: 0.9rem 2rem;
                 font-size: 1rem;
@@ -298,7 +310,7 @@
 
     <!-- Main Question Card -->
     <div class="card" id="question-card">
-        <div class="heart-icon">&#10084;</div>
+        <img src="photo.png" alt="Us" class="couple-photo">
         <h1>Niki, will you be my Valentine?</h1>
         <div class="buttons">
             <button class="btn yes-btn" id="yes-btn">Yes!</button>
