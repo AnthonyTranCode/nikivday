@@ -155,8 +155,7 @@
         .no-btn {
             background: var(--gray);
             color: var(--white);
-            transition: left 0.2s ease-out, top 0.2s ease-out, transform 0.3s ease;
-            min-width: 200px;
+            transition: left 0.2s ease-out, top 0.2s ease-out, transform 0.3s ease, min-width 0.3s ease;
             white-space: nowrap;
         }
 
@@ -447,6 +446,9 @@
         // No button escape logic
         function moveNoButton(e) {
             e.preventDefault();
+
+            // Expand button to fit longer phrases
+            noBtn.style.minWidth = '220px';
 
             // Cycle to next phrase
             if (phraseIndex < noButtonPhrases.length - 1) {
