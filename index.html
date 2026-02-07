@@ -123,9 +123,9 @@
         /* Buttons Container */
         .buttons {
             display: flex;
-            gap: 1rem;
+            gap: 1.5rem;
             justify-content: center;
-            flex-wrap: wrap;
+            align-items: center;
         }
 
         .btn {
@@ -145,17 +145,18 @@
             background: linear-gradient(135deg, var(--pink-dark) 0%, var(--red-heart) 100%);
             color: var(--white);
             box-shadow: 0 4px 15px rgba(255, 105, 180, 0.4);
+            transition: all 0.3s ease;
         }
 
         .yes-btn:hover {
-            transform: scale(1.05);
+            filter: brightness(1.1);
             box-shadow: 0 6px 20px rgba(255, 105, 180, 0.6);
         }
 
         .no-btn {
             background: var(--gray);
             color: var(--white);
-            transition: left 0.2s ease-out, top 0.2s ease-out, transform 0.3s ease, min-width 0.3s ease;
+            transition: all 0.3s ease;
             white-space: nowrap;
         }
 
@@ -443,12 +444,14 @@
             createCelebrationHearts();
         });
 
-        // No button escape logic
-        function moveNoButton(e) {
-            e.preventDefault();
+        // Growth/shrink trackers
+        let yesPadding = 1;    // rem multiplier for padding
+        let yesFontSize = 1.2; // rem
+        let noScale = 1;
 
-            // Expand button to fit longer phrases
-            noBtn.style.minWidth = '220px';
+        // No button click logic - grows Yes, shrinks No
+        function handleNoClick(e) {
+            e.preventDefault();
 
             // Cycle to next phrase
             if (phraseIndex < noButtonPhrases.length - 1) {
@@ -456,47 +459,19 @@
                 noBtn.textContent = noButtonPhrases[phraseIndex];
             }
 
-            const btn = noBtn;
-            const padding = 20;
+            // Grow the Yes button (padding + font-size so it takes real layout space)
+            yesPadding += 0.3;
+            yesFontSize += 0.15;
+            yesBtn.style.padding = yesPadding + 'rem ' + (yesPadding * 2.5) + 'rem';
+            yesBtn.style.fontSize = yesFontSize + 'rem';
 
-            // Get viewport dimensions
-            const viewportWidth = window.innerWidth;
-            const viewportHeight = window.innerHeight;
-
-            // Get button dimensions
-            const btnWidth = btn.offsetWidth;
-            const btnHeight = btn.offsetHeight;
-
-            // Calculate safe bounds
-            const maxX = viewportWidth - btnWidth - padding;
-            const maxY = viewportHeight - btnHeight - padding;
-
-            // Generate random position within bounds
-            let newX = Math.random() * maxX;
-            let newY = Math.random() * maxY;
-
-            // Ensure minimum padding from edges
-            newX = Math.max(padding, Math.min(newX, maxX));
-            newY = Math.max(padding, Math.min(newY, maxY));
-
-            // Apply fixed positioning and move
-            btn.style.position = 'fixed';
-            btn.style.left = newX + 'px';
-            btn.style.top = newY + 'px';
-            btn.style.zIndex = '50';
+            // Shrink the No button (minimum 0.3 scale so it stays clickable)
+            noScale = Math.max(0.3, noScale - 0.07);
+            noBtn.style.transform = 'scale(' + noScale + ')';
         }
 
-        // Desktop: mouseenter
-        noBtn.addEventListener('mouseenter', moveNoButton);
-
-        // Mobile: touchstart
-        noBtn.addEventListener('touchstart', moveNoButton);
-
-        // Prevent click on No button (optional fun message)
-        noBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            moveNoButton(e);
-        });
+        // No button click
+        noBtn.addEventListener('click', handleNoClick);
 
         // Reveal gift function
         function revealGift(element, icon, text) {
@@ -536,22 +511,6 @@
             }
         }
 
-        // Handle window resize - reset No button if it goes out of bounds
-        window.addEventListener('resize', function() {
-            if (noBtn.style.position === 'fixed') {
-                const btnRect = noBtn.getBoundingClientRect();
-                const viewportWidth = window.innerWidth;
-                const viewportHeight = window.innerHeight;
-
-                // Check if button is out of bounds and reset if needed
-                if (btnRect.right > viewportWidth || btnRect.bottom > viewportHeight) {
-                    const maxX = viewportWidth - noBtn.offsetWidth - 20;
-                    const maxY = viewportHeight - noBtn.offsetHeight - 20;
-                    noBtn.style.left = Math.min(parseFloat(noBtn.style.left), maxX) + 'px';
-                    noBtn.style.top = Math.min(parseFloat(noBtn.style.top), maxY) + 'px';
-                }
-            }
-        });
     </script>
 </body>
 </html>
